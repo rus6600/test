@@ -1,20 +1,17 @@
-/* Box sizing rules */
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap");
+
 *,
 *::before,
 *::after {
   box-sizing: border-box;
 }
 
-@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap");
-
-/* Prevent font size inflation */
 html {
   -moz-text-size-adjust: none;
   -webkit-text-size-adjust: none;
   text-size-adjust: none;
 }
 
-/* Remove default margin in favour of better control in authored CSS */
 body,
 h1,
 h2,
@@ -29,19 +26,16 @@ dd {
   font-family: "Roboto", sans-serif;
 }
 
-/* Remove list styles on ul, ol elements with a list role, which suggests default styling will be removed */
 ul[role="list"],
 ol[role="list"] {
   list-style: none;
 }
 
-/* Set core body defaults */
 body {
   min-height: 100vh;
   line-height: 1.5;
 }
 
-/* Set shorter line heights on headings and interactive elements */
 h1,
 h2,
 h3,
@@ -52,7 +46,6 @@ label {
   line-height: 1.1;
 }
 
-/* Balance text wrapping on headings */
 h1,
 h2,
 h3,
@@ -60,20 +53,17 @@ h4 {
   text-wrap: balance;
 }
 
-/* A elements that don't have a class get default styles */
 a:not([class]) {
   text-decoration-skip-ink: auto;
   color: currentColor;
 }
 
-/* Make images easier to work with */
 img,
 picture {
   max-width: 100%;
   display: block;
 }
 
-/* Inherit fonts for inputs and buttons */
 input,
 button,
 textarea,
@@ -82,12 +72,10 @@ select {
   font-size: inherit;
 }
 
-/* Make sure textareas without a rows attribute are not tiny */
 textarea:not([rows]) {
   min-height: 10em;
 }
 
-/* Anything that has been anchored to should have extra scroll margin */
 :target {
   scroll-margin-block: 5ex;
 }
@@ -96,36 +84,61 @@ p {
   margin: 0;
 }
 
+$max-width: 1024px;
+$min_width: 360px;
+$color: #1877f2;
+$fontColor: white;
+
 #root {
   display: flex;
-  gap: 1rem;
-  width: min(100%, 1024px);
+  width: min(100%, $max-width);
   margin-inline: auto;
+  gap: 1rem;
   overflow: visible;
+  @media screen and (max-width: $max-width) {
+    flex-direction: column;
+    align-items: center;
+    overflow: scroll;
+  }
 }
 
 .header {
   display: flex;
-  padding: 2rem;
-  flex-direction: column;
-  gap: 1rem;
   position: sticky;
   top: 2rem;
   height: fit-content;
   width: 30%;
+  padding: 2rem;
+  flex-direction: column;
+  gap: 1rem;
+
+  @media screen and (max-width: $max-width) {
+    position: unset;
+    width: 100%;
+    padding: 0.5rem;
+    justify-content: center;
+    overflow: scroll;
+    flex-direction: row;
+  }
 }
 
 button {
-  $color: #1877f2;
-  $fontColor: white;
   min-width: 160px;
   padding: 0.5rem 1rem;
   outline: none;
   border: none;
-  color: $fontColor;
   border-radius: 8px;
+  color: $fontColor;
   background-color: $color;
   text-transform: capitalize;
+  @media screen and (max-width: $max-width) {
+    min-width: fit-content;
+  }
+}
+
+.selected {
+  transform: scale(1.1);
+  transition: transform 100ms ease-in;
 }
 
 .drinks {
@@ -136,7 +149,7 @@ button {
 
 .drink {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax($min_width, 1fr));
   gap: 1rem;
 }
 
@@ -157,6 +170,7 @@ button {
     margin-bottom: 0.5rem;
   }
 }
+
 .drink__img {
   border-radius: 8px;
   height: 100%;
@@ -167,9 +181,11 @@ button {
 .fw-300 {
   font-weight: 300;
 }
+
 .fw-400 {
   font-weight: 400;
 }
+
 .fw-700 {
   font-weight: 700;
 }

@@ -1,12 +1,13 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
-import { App } from "./App";
 import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
 import { Provider } from "react-redux";
 
 import { store } from "../store/store";
 
-import { Header } from "./components";
+import { Drink, Header } from "./components";
+import NotFound from "./components/NotFound";
+import { cocktailEnum } from "../types";
 
 const rootEl = document.getElementById("root");
 if (!rootEl) throw new Error("Root element with id root is missing");
@@ -19,18 +20,22 @@ const AppLayout = () => (
   </>
 );
 
+const getRoutes = () => {
+  return [
+    { path: "*", element: <NotFound /> },
+    ...Object.keys(cocktailEnum).map((cocktail) => {
+      return {
+        path: cocktail === cocktailEnum.margarita ? "/" : `/${cocktail}`,
+        element: <Drink />,
+      };
+    }),
+  ];
+};
+
 const router = createBrowserRouter([
   {
     element: <AppLayout />,
-    children: [
-      {
-        path: "/",
-        element: <App />,
-      },
-      { path: "/mojito", element: <App /> },
-      { path: "/a1", element: <App /> },
-      { path: "/kir", element: <App /> },
-    ],
+    children: [...getRoutes()],
   },
 ]);
 

@@ -1,14 +1,12 @@
 import React from "react";
 import { useLocation } from "react-router";
 
-import "./assets/styles/style.scss";
-import { cocktailEnum, drinkType } from "../types";
-import { useGetItemByNameQuery } from "../store/api";
-import { getKeys } from "../utils";
+import "../assets/styles/style.scss";
+import { cocktailEnum, drinkType } from "../../types";
+import { useGetItemByNameQuery } from "../../store/api";
+import { getKeys, regEx } from "../../utils";
 
-const regEx = /(strMeasure)+|[0-9]+/g;
-
-export const App = () => {
+export const Drink = () => {
   const location = useLocation();
   const { data, isLoading, isError } = useGetItemByNameQuery(
     location.pathname.slice(1)
