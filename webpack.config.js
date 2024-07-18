@@ -1,58 +1,70 @@
-const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const path = require("path");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = [
-    {
-        entry: "./src/client/index.tsx",
-        mode: 'development',
-        target: "web",
-        output: {
-            path: path.resolve(__dirname, 'dist/client'),
-            filename: "client_bundle.js"
+  {
+    entry: "./src/client/index.tsx",
+    mode: "development",
+    target: "web",
+    output: {
+      path: path.resolve(__dirname, "dist/client"),
+      filename: "client_bundle.js",
+      clean: true,
+    },
+    plugins: [
+      new HtmlWebpackPlugin({
+        template: "./src/client/index.html",
+      }),
+    ],
+    devtool: "inline-source-map",
+    devServer: {
+      historyApiFallback: true,
+      static: "./",
+      port: 5000,
+      hot: true,
+      open: true,
+      client: {
+        overlay: false,
+        logging: "warn",
+      },
+    },
+    resolve: {
+      extensions: [".ts", ".tsx", ".js", "jsx"],
+    },
+    module: {
+      rules: [
+        {
+          test: /\.(ts|tsx)$/,
+          exclude: /node_modules/,
+          use: "ts-loader",
         },
-        plugins: [
-            new HtmlWebpackPlugin({
-                template: './src/client/index.html',
-            })
-        ],
-        resolve: {
-            extensions: [".ts", ".tsx", ".js", "jsx"]
+        {
+          test: /\.(js|jsx)$/,
+          exclude: /node_modules/,
+          use: {
+            loader: "babel-loader",
+            options: {
+              presets: [
+                "@babel/preset-env",
+                "@babel/preset-react",
+                "@babel/preset-typescript",
+              ],
+            },
+          },
         },
-        module: {
-            rules: [
-                {
-                    test: /\.(ts|tsx)$/,
-                    exclude: /node_modules/,
-                    use: 'ts-loader',
-                },
-                {
-                    test: /\.(js|jsx)$/,
-                    exclude: /node_modules/,
-                    use: {
-                        loader: 'babel-loader',
-                        options: {
-                            presets: ['@babel/preset-env', "@babel/preset-react","@babel/preset-typescript"]
-                        }
-                    },
-                },
-                {
-                    test: /\.css$/,
-                    use: ['style-loader', 'css-loader']
-                },
-                {
-                    test: /\.s[ac]ss$/i,
-                    use: [
-                        "style-loader",
-                        "css-loader",
-                        "sass-loader",
-                    ],
-                },
-                {
-                    test: /\.(png|jpg|gif|svg|ttf)$/i,
-                    type: 'asset/resource',
-                }
-            ]
-        }
-    }
-
-]
+        {
+          test: /\.css$/,
+          use: ["style-loader", "css-loader"],
+        },
+        {
+          test: /\.s[ac]ss$/i,
+          use: ["style-loader", "css-loader", "sass-loader"],
+        },
+        {
+          test: /\.(png|jpg|gif|svg|ttf)$/i,
+          type: "asset/resource",
+        },
+      ],
+    },
+  },
+];
